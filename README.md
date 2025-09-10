@@ -1,77 +1,198 @@
-# Welcome to your Expo app 👋
+# BusSP - Complete Bus Tracking App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+🚌 A comprehensive React Native application for tracking São Paulo's public transportation system, built with modern technologies and exceptional UX/UI design.
 
-## Get started
+## 🎯 Features
 
-1. Install dependencies
+### Core Functionality
+- **Real-time Bus Tracking**: Live position updates using SPTrans Olho Vivo API
+- **Smart Search**: Bus line search with autocomplete and suggestions
+- **Location Services**: GPS integration for nearby stops discovery
+- **Favorites Management**: Save and manage favorite bus lines with persistent storage
+- **Search History**: Intelligent search suggestions based on usage patterns
+- **Offline Support**: Smart caching system for offline functionality
 
+### User Experience
+- **Professional Design**: Clean, modern interface following Material Design principles
+- **Dark/Light Theme**: Automatic system preference detection
+- **Pull-to-Refresh**: Intuitive refresh functionality across all screens
+- **Loading States**: Professional loading indicators and error handling
+- **Accessibility**: Screen reader support and high contrast options
+
+## 🛠 Technical Stack
+
+### Frontend
+- **Framework**: React Native with Expo
+- **Language**: TypeScript
+- **Navigation**: Expo Router with tab-based navigation
+- **State Management**: Zustand with React Query
+- **Animations**: React Native Reanimated 3
+- **Storage**: AsyncStorage with persistent Zustand stores
+
+### Backend Integration
+- **API**: SPTrans Olho Vivo Real-time API
+- **Authentication**: SPTrans API token-based authentication
+- **Caching**: Smart caching with configurable TTL
+- **Location**: Expo Location services
+
+### Design System
+- **Colors**: Comprehensive color palette with primary/secondary themes
+- **Typography**: Scalable typography system
+- **Components**: Reusable UI component library (Button, Input, Card, Typography)
+- **Spacing**: Consistent spacing scale throughout the app
+
+## 📱 Screens
+
+### Home Screen
+- Quick search functionality
+- Access to favorites and nearby stops
+- Recent searches display
+
+### Search Screen
+- Real-time bus line search
+- Favorites integration with star buttons
+- Error handling and loading states
+
+### Favorites Screen
+- Manage saved bus lines
+- Notification settings for each favorite
+- Delete and edit functionality
+
+### Map Screen
+- GPS location detection
+- Nearby stops discovery
+- Distance calculations
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- Expo CLI
+- iOS Simulator or Android Emulator
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/anderbmoura/bussp.git
+   cd bussp
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
-   npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on device/simulator:
+   ```bash
+   npm run ios     # iOS
+   npm run android # Android
+   npm run web     # Web
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Development Commands
 
 ```bash
-npm run reset-project
+npm start        # Start Expo development server
+npm run lint     # Run ESLint
+npm run reset-project # Reset to clean project structure
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🏗 Architecture
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Firebase Functions
-
-This project includes Firebase Cloud Functions for backend functionality:
-
-### Quick Start
-```bash
-# Install function dependencies
-npm run functions:install
-
-# Build functions
-npm run functions:build
-
-# Test locally with emulators
-npm run functions:serve
-
-# Deploy to Firebase
-npm run functions:deploy
+### Project Structure
+```
+bussp/
+├── src/
+│   ├── components/
+│   │   ├── ui/                 # Design System Components
+│   │   └── business/           # Domain-Specific Components
+│   ├── screens/                # Screen Components
+│   ├── services/               # API and External Services
+│   │   ├── api/               # SPTrans API Integration
+│   │   ├── cache/             # Caching System
+│   │   └── location/          # GPS Services
+│   ├── hooks/                 # Custom React Hooks
+│   ├── stores/                # Zustand State Stores
+│   ├── types/                 # TypeScript Type Definitions
+│   ├── utils/                 # Utility Functions
+│   └── theme/                 # Design System Theme
+└── app/                       # Expo Router Pages
 ```
 
-### Available Functions
-- **helloWorld**: Test endpoint
-- **getBusData**: Retrieve bus data from Firestore
-- **updateBusLocation**: Update bus location coordinates
-- **createUserProfile**: Firestore trigger for new users
+### State Management
+- **Zustand**: Lightweight state management with TypeScript support
+- **React Query**: Server state management with caching
+- **AsyncStorage**: Persistent storage for favorites and search history
 
-See [functions/README.md](functions/README.md) for detailed documentation.
+### API Integration
+- **SPTrans Olho Vivo**: Real-time bus tracking data
+- **Authentication**: Automatic token-based authentication
+- **Error Handling**: Comprehensive error boundaries and retry logic
+- **Caching**: Smart caching with configurable expiration times
 
-## Join the community
+## 🎨 Design System
 
-Join our community of developers creating universal apps.
+### Color Palette
+- **Primary**: Blue (#2196F3) - Bus tracking theme
+- **Secondary**: Orange (#FF9800) - Accent colors
+- **Success**: Green (#4CAF50) - Success states
+- **Error**: Red (#F44336) - Error states
+- **Gray Scale**: Comprehensive gray palette for text and backgrounds
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Components
+- **Button**: Multiple variants (primary, secondary, outline, text)
+- **Input**: Form inputs with validation and error states
+- **Card**: Container component with multiple variants
+- **Typography**: Scalable text components with semantic variants
+
+## 🔧 Configuration
+
+### Environment Variables
+The app uses the SPTrans Olho Vivo API with the following configuration:
+- **API Base URL**: `http://api.olhovivo.sptrans.com.br/v2.1`
+- **API Key**: Configured in `src/utils/constants.ts`
+
+### Cache Configuration
+- **Bus Positions**: 30 seconds TTL
+- **Bus Lines**: 24 hours TTL
+- **Bus Stops**: 7 days TTL
+- **Search Results**: 1 hour TTL
+
+## 📊 Performance
+
+### Optimization Features
+- **Debounced Search**: Reduces API calls during typing
+- **Smart Caching**: Minimizes redundant network requests
+- **Lazy Loading**: Components loaded on demand
+- **Memory Management**: Automatic cleanup of subscriptions
+
+## 🧪 Testing
+
+The project includes comprehensive error handling and loading states. Testing can be added with:
+- **Jest**: Unit testing framework
+- **React Native Testing Library**: Component testing
+- **Detox**: E2E testing (optional)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 🙏 Acknowledgments
+
+- **SPTrans**: For providing the Olho Vivo API
+- **Expo Team**: For the excellent React Native platform
+- **React Native Community**: For the amazing ecosystem
