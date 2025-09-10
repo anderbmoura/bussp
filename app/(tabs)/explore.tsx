@@ -1,110 +1,264 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Button, Card, Typography } from '@/src/components/ui';
+import { colors, spacing } from '@/src/theme';
+import { useLocation } from '@/src/hooks/useLocation';
+import { useNearbyStops } from '@/src/hooks/useBusData';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+export default function MapScreen() {
+  const insets = useSafeAreaInsets();
+  const [showNearbyStops, setShowNearbyStops] = useState(false);
 
-export default function TabTwoScreen() {
+  const {
+    location,
+    isLoading: locationLoading,
+    error: locationError,
+    hasPermission,
+    requestPermission,
+    getCurrentLocation,
+  } = useLocation();
+
+  const {
+    data: nearbyStops = [],
+    isLoading: stopsLoading,
+    error: stopsError,
+  } = useNearbyStops(
+    location?.latitude || 0,
+    location?.longitude || 0,
+    showNearbyStops && !!location
+  );
+
+  useEffect(() => {
+    if (hasPermission) {
+      getCurrentLocation();
+    }
+  }, [hasPermission, getCurrentLocation]);
+
+  const handleLocationRequest = async () => {
+    const granted = await requestPermission();
+    if (granted) {
+      getCurrentLocation();
+    } else {
+      Alert.alert(
+        'Permissão Negada',
+        'Para encontrar pontos próximos, é necessário permitir o acesso à localização.',
+        [{ text: 'OK' }]
+      );
+    }
+  };
+
+  const handleFindNearbyStops = () => {
+    if (!location) {
+      handleLocationRequest();
+      return;
+    }
+    setShowNearbyStops(true);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <StatusBar style="auto" />
+      
+      <View style={styles.header}>
+        <Typography variant="heading2" color={colors.primary[500]}>
+          Mapa e Pontos
+        </Typography>
+        <Typography variant="body2" color={colors.gray[600]}>
+          Encontre pontos de ônibus próximos a você
+        </Typography>
+      </View>
+
+      <View style={styles.content}>
+        {/* Location Status Card */}
+        <Card variant="outlined" style={styles.statusCard}>
+          <Typography variant="heading4" style={styles.cardTitle}>
+            📍 Sua Localização
+          </Typography>
+          
+          {locationLoading ? (
+            <Typography variant="body2" color={colors.gray[600]}>
+              Obtendo localização...
+            </Typography>
+          ) : location ? (
+            <View>
+              <Typography variant="body2" color={colors.success}>
+                ✅ Localização obtida
+              </Typography>
+              <Typography variant="caption" color={colors.gray[600]}>
+                Lat: {location.latitude.toFixed(6)}
+              </Typography>
+              <Typography variant="caption" color={colors.gray[600]}>
+                Lng: {location.longitude.toFixed(6)}
+              </Typography>
+            </View>
+          ) : locationError ? (
+            <View>
+              <Typography variant="body2" color={colors.error}>
+                ❌ Erro ao obter localização
+              </Typography>
+              <Typography variant="caption" color={colors.gray[600]}>
+                {locationError}
+              </Typography>
+            </View>
+          ) : !hasPermission ? (
+            <Typography variant="body2" color={colors.warning}>
+              ⚠️ Permissão de localização necessária
+            </Typography>
+          ) : (
+            <Typography variant="body2" color={colors.gray[600]}>
+              Localização não disponível
+            </Typography>
+          )}
+        </Card>
+
+        {/* Actions */}
+        <View style={styles.actions}>
+          {!hasPermission ? (
+            <Button
+              title="Permitir Localização"
+              onPress={handleLocationRequest}
+              loading={locationLoading}
+              fullWidth
+            />
+          ) : (
+            <View style={styles.buttonGroup}>
+              <Button
+                title="Atualizar Localização"
+                onPress={getCurrentLocation}
+                loading={locationLoading}
+                variant="outline"
+                style={styles.halfButton}
+              />
+              <Button
+                title="Pontos Próximos"
+                onPress={handleFindNearbyStops}
+                loading={stopsLoading}
+                disabled={!location}
+                style={styles.halfButton}
+              />
+            </View>
+          )}
+        </View>
+
+        {/* Nearby Stops */}
+        {showNearbyStops && (
+          <View style={styles.nearbyStops}>
+            <Typography variant="heading3" style={styles.sectionTitle}>
+              🚏 Pontos Próximos
+            </Typography>
+            
+            {stopsLoading ? (
+              <Card variant="outlined" padding="lg">
+                <Typography variant="body2" color={colors.gray[600]} textAlign="center">
+                  Buscando pontos próximos...
+                </Typography>
+              </Card>
+            ) : stopsError ? (
+              <Card variant="outlined" padding="lg">
+                <Typography variant="body2" color={colors.error} textAlign="center">
+                  Erro ao buscar pontos próximos
+                </Typography>
+                <Typography variant="caption" color={colors.gray[600]} textAlign="center">
+                  Verifique sua conexão e tente novamente
+                </Typography>
+              </Card>
+            ) : nearbyStops.length > 0 ? (
+              nearbyStops.slice(0, 5).map((stop, index) => (
+                <Card key={stop.id} variant="outlined" style={styles.stopCard}>
+                  <Typography variant="body1">{stop.name}</Typography>
+                  <Typography variant="caption" color={colors.gray[600]}>
+                    {stop.address}
+                  </Typography>
+                  {stop.distance && (
+                    <Typography variant="caption" color={colors.primary[500]}>
+                      📍 {Math.round(stop.distance)}m de distância
+                    </Typography>
+                  )}
+                </Card>
+              ))
+            ) : (
+              <Card variant="outlined" padding="lg">
+                <Typography variant="body2" color={colors.gray[600]} textAlign="center">
+                  Nenhum ponto encontrado nas proximidades
+                </Typography>
+              </Card>
+            )}
+          </View>
+        )}
+
+        {/* Future Map Placeholder */}
+        <Card variant="outlined" style={styles.mapPlaceholder}>
+          <Typography variant="body1" color={colors.gray[600]} textAlign="center">
+            🗺️ Mapa Interativo
+          </Typography>
+          <Typography variant="caption" color={colors.gray[500]} textAlign="center">
+            Em breve: mapa com localização em tempo real dos ônibus
+          </Typography>
+        </Card>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    backgroundColor: colors.background.light,
   },
-  titleContainer: {
+  
+  header: {
+    padding: spacing.lg,
+    paddingTop: spacing.md,
+    alignItems: 'center',
+  },
+  
+  content: {
+    flex: 1,
+    padding: spacing.lg,
+    gap: spacing.lg,
+  },
+  
+  statusCard: {
+    padding: spacing.md,
+  },
+  
+  cardTitle: {
+    marginBottom: spacing.sm,
+  },
+  
+  actions: {
+    gap: spacing.md,
+  },
+  
+  buttonGroup: {
     flexDirection: 'row',
-    gap: 8,
+    gap: spacing.md,
+  },
+  
+  halfButton: {
+    flex: 1,
+  },
+  
+  nearbyStops: {
+    gap: spacing.md,
+  },
+  
+  sectionTitle: {
+    color: colors.gray[800],
+  },
+  
+  stopCard: {
+    padding: spacing.md,
+    gap: spacing.xs,
+  },
+  
+  mapPlaceholder: {
+    padding: spacing.xl,
+    alignItems: 'center',
+    backgroundColor: colors.gray[50],
+    minHeight: 200,
+    justifyContent: 'center',
   },
 });

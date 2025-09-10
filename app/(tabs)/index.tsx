@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { router } from 'expo-router';
 import { Button, Input, Card, Typography } from '@/src/components/ui';
 import { colors, spacing } from '@/src/theme';
 
@@ -9,8 +10,9 @@ export default function HomeScreen() {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
-      // TODO: Navigate to search results
+      router.push('/(tabs)/search');
+    } else {
+      router.push('/(tabs)/search');
     }
   };
 
