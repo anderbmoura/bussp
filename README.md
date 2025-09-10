@@ -191,12 +191,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📞 Support
-
-For support and questions:
-- Create an issue in this repository
-- Check the [SPTrans API documentation](http://www.sptrans.com.br/desenvolvedores/)
-
 ## 🙏 Acknowledgments
 
 - **SPTrans**: For providing the Olho Vivo API
