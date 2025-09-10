@@ -168,8 +168,13 @@ export default function SearchScreen() {
             refreshControl={
               <RefreshControl
                 refreshing={isRefetching}
-                onRefresh={refetch}
+                onRefresh={() => {
+                  if (debouncedQuery.length >= 2) {
+                    refetch();
+                  }
+                }}
                 colors={[colors.primary[500]]}
+                tintColor={colors.primary[500]}
               />
             }
             contentContainerStyle={styles.listContent}
