@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "tonopontook",
-    "slug": "tonopontook",
+    "name": "BusSP",
+    "slug": "bussp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "tonopontook",
+    "scheme": "bussp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
