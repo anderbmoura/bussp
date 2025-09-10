@@ -64,7 +64,7 @@ export default function HomeScreen() {
         </Typography>
         
         <View style={styles.actionGrid}>
-          <Card variant="elevated" onPress={() => console.log('Nearby stops')} style={styles.actionCard}>
+          <Card variant="elevated" onPress={() => router.push('/(tabs)/explore')} style={styles.actionCard}>
             <Typography variant="body1" color={colors.primary[500]}>
               📍 Pontos Próximos
             </Typography>
@@ -73,7 +73,7 @@ export default function HomeScreen() {
             </Typography>
           </Card>
           
-          <Card variant="elevated" onPress={() => console.log('Favorites')} style={styles.actionCard}>
+          <Card variant="elevated" onPress={() => router.push('/(tabs)/favorites')} style={styles.actionCard}>
             <Typography variant="body1" color={colors.secondary[500]}>
               ⭐ Favoritos
             </Typography>

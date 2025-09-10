@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Input, Card, Typography, Button } from '@/src/components/ui';
+import { Input, Typography, Button } from '@/src/components/ui';
+import { BusLineCard } from '@/src/components/business/BusLineCard';
 import { colors, spacing } from '@/src/theme';
 import { useSearchBusLines, useAuthenticate } from '@/src/hooks/useBusData';
 import { debounce } from '@/src/utils/helpers';
@@ -52,33 +53,16 @@ export default function SearchScreen() {
   };
 
   const renderBusLine = ({ item }: { item: ProcessedBusLine }) => (
-    <Card
-      variant="outlined"
+    <BusLineCard
+      busLine={item}
       onPress={() => {
         console.log('Selected line:', item);
         // TODO: Navigate to line details
       }}
-      style={styles.lineCard}
-    >
-      <View style={styles.lineHeader}>
-        <Typography variant="heading4" color={colors.primary[500]}>
-          {item.cl}
-        </Typography>
-        {item.isCircular && (
-          <Typography variant="caption" color={colors.secondary[500]}>
-            Circular
-          </Typography>
-        )}
-      </View>
-      
-      <Typography variant="body1" style={styles.lineDescription}>
-        {item.description}
-      </Typography>
-      
-      <Typography variant="caption" color={colors.gray[600]}>
-        Terminal: {item.ts}
-      </Typography>
-    </Card>
+      onFavoritePress={() => {
+        console.log('Favorite toggled for line:', item.cl);
+      }}
+    />
   );
 
   const renderEmptyState = () => {
@@ -219,22 +203,6 @@ const styles = StyleSheet.create({
   
   listContent: {
     paddingHorizontal: spacing.lg,
-  },
-  
-  lineCard: {
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
-  
-  lineHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
-  },
-  
-  lineDescription: {
-    marginBottom: spacing.xs,
   },
   
   emptyState: {
