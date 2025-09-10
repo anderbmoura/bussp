@@ -42,6 +42,33 @@ To learn more about developing your project with Expo, look at the following res
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
+## Firebase Functions
+
+This project includes Firebase Cloud Functions for backend functionality:
+
+### Quick Start
+```bash
+# Install function dependencies
+npm run functions:install
+
+# Build functions
+npm run functions:build
+
+# Test locally with emulators
+npm run functions:serve
+
+# Deploy to Firebase
+npm run functions:deploy
+```
+
+### Available Functions
+- **helloWorld**: Test endpoint
+- **getBusData**: Retrieve bus data from Firestore
+- **updateBusLocation**: Update bus location coordinates
+- **createUserProfile**: Firestore trigger for new users
+
+See [functions/README.md](functions/README.md) for detailed documentation.
+
 ## Join the community
 
 Join our community of developers creating universal apps.

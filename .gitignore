@@ -36,4 +36,9 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
 app-example
